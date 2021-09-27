@@ -1,0 +1,21 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    <div class="blog-list">
+        {% for post in post_list %}
+            <div class="container border border-light"
+                 style="border-radius: 10px; width:500px; text-align: center; box-shadow: 1px 2px 8px 0 gray; padding: 2em; margin: 2em">
+                <h3 class="center">
+                    <a style="text-decoration: none; display: block; border:black;color:black;"
+                       href="{% url 'blog:post_detail' pk=post.pk %}"
+                       class="link ">{{ post.title }}</a>
+                </h3>
+                <div style="font-size: small" class="form-inline date">
+                    <p>Published on: {{ post.published_date|date:'D M Y' }}</p>
+                </div>
+                <a href="{% url 'blog:post_detail' pk=post.pk %}" class="form-inline">Comments<i
+                        class="fas fa-comment ml-2"></i>: {{ post.approve_comments.count }}</a>
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}
