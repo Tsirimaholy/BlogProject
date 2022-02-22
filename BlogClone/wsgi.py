@@ -1,5 +1,5 @@
 """
-WSGI config for BlogClone_errorFixed project.
+WSGI config for BlogClone project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'BlogClone_errorFixed.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'BlogClone.settings')
 
 application = get_wsgi_application()
