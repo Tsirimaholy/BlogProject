@@ -1,0 +1,14 @@
+*,body{
+    font-family: 'Raleway', sans-serif ;
+}
+.post_list {
+    border-radius: 10px;
+    width: 500px;
+    box-shadow: 1px 2px 8px 0 gray;
+    padding: 2em;
+    margin: 2em;
+}
+
+.user_hello {
+    color: wheat;
+}

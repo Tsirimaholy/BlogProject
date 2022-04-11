@@ -2,18 +2,19 @@
 {% block content %}
     <div class="blog-list">
         {% for post in post_list %}
-            <div class="container border border-light"
-                 style="border-radius: 10px; width:500px; text-align: center; box-shadow: 1px 2px 8px 0 gray; padding: 2em; margin: 2em">
-                <h3 class="center">
+            <div class="container border border-light post_list">
+                <h3>
                     <a style="text-decoration: none; display: block; border:black;color:black;"
                        href="{% url 'blog:post_detail' pk=post.pk %}"
                        class="link ">{{ post.title }}</a>
                 </h3>
-                <div style="font-size: small" class="form-inline date">
-                    <p>Published on: {{ post.published_date|date:'D M Y' }}</p>
+                <div class="date text-muted mb-3">
+                    <em class="bi-calendar-date"></em>
+                    <span>{{ post.published_date|date:'D M Y' }}</span>
                 </div>
-                <a href="{% url 'blog:post_detail' pk=post.pk %}" class="form-inline">Comments<i
-                        class="fas fa-comment ml-2"></i>: {{ post.approve_comments.count }}</a>
+                <a href="{% url 'blog:post_detail' pk=post.pk %}" class="card-link">
+                    Comments
+                    <em class="bi-chat-left-dots"></em> </a> <span class="border p-2 rounded-circle">{{ post.approve_comments.count }}</span>
             </div>
         {% endfor %}
 
