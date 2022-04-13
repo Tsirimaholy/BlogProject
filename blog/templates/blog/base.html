@@ -1,44 +1,48 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
-    <link rel="stylesheet" type="text/css" href="../../static/css/post_list.css"/>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Simple Blog</title>
+
+    <link rel="stylesheet" type="text/css" href="../../static/css/post_list.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/post_detail.css' %}">
     <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
     <link rel="stylesheet" type="text/css"
-          href="{% static 'Library&Framework/bootstrap-4.5.3-dist/css/bootstrap.css' %}">
+        href="{% static 'Library&Framework/bootstrap-4.5.3-dist/css/bootstrap.css' %}">
     <script src="{% static 'Library&Framework/bootstrap-4.5.3-dist/jquery.min.js' %}"></script>
     <script src="{% static 'Library&Framework/bootstrap-4.5.3-dist/js/bootstrap.bundle.js' %}"></script>
     <link rel="stylesheet"
-          href="{% static 'Library&Framework/node_modules/bootstrap-icons/font/bootstrap-icons.css' %}">
+        href="{% static 'Library&Framework/node_modules/bootstrap-icons/font/bootstrap-icons.css' %}">
+
 </head>
+
 <body>
-{# navbar #}
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-5">
-    <a class="navbar-brand" href="{% url 'blog:post_list' %}"><em class="bi-activity"></em> Blog</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    {# navbar #}
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-5">
+        <a class="navbar-brand" href="{% url 'blog:post_list' %}"><em class="bi-activity"></em> Blog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li id="home" class="nav-item ">
-                <a href="{% url 'blog:post_list' %}" class="nav-link ">Home</a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'blog:about' %}" class="nav-link">About</a>
-            </li>
-            <li class="nav-item">
-                <a href="https://github.com/Tsirimaholy" target="_blank" class="nav-link">GitHub</a>
-            </li>
-        </ul>
-        <ul class="navbar-nav navbar-right ">
-            {% if user.is_authenticated %}
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li id="home" class="nav-item ">
+                    <a href="{% url 'blog:post_list' %}" class="nav-link ">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'blog:about' %}" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://github.com/Tsirimaholy" target="_blank" class="nav-link">GitHub</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav navbar-right ">
+                {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a href="{% url 'blog:post_draft_list' %}" class="nav-link">Draft</a>
                 </li>
@@ -51,23 +55,52 @@
                 <li class="nav-item">
                     <a class="nav-link user_hello">Hello {{ user.username }} 👋</a>
                 </li>
-            {% else %}
+                {% else %}
                 <li class="nav-item">
                     <a href="{% url 'login' %}" class="nav-link">Login</a>
                 </li>
-            {% endif %}
-        </ul>
+                {% endif %}
+            </ul>
+        </div>
+
+    </nav>
+    {# post list#}
+    <div class="container">
+
+        {% block content %}
+
+        {% endblock %}
+
     </div>
 
-</nav>
-{# post list#}
-<div class="container">
-
-    {% block content %}
-
-    {% endblock %}
-
-</div>
-
 </body>
+<script src="https://js.pusher.com/7.0.3/pusher.min.js"></script>
+<script>
+    var pusher = new Pusher("92577d85ff1ddd64974e", { cluster: "ap2" })
+    var channel = pusher.subscribe("my-channel");
+    blog_list = document.getElementsByClassName("blog-list")[0];
+    channel.bind("my-event", (data) => {
+        const blog_list = document.getElementsByClassName("blog-list")[0];
+        const div = document.createElement("div");
+        div.className = "container border border-light post_list";
+        div.innerHTML = `
+            <h3>
+                <a style="text-decoration: none; display: block; border:black;color:black;" href="/post/${data.pk}"
+                    class="link ">${data.title}</a>
+            </h3>
+            <div class="date text-muted mb-3">
+                <em class="bi-calendar-date"></em>
+                <span>${data.published_date}</span>
+            </div>
+            <a href="/post/${data.pk}" class="card-link">
+                Comments
+                <em class="bi-chat-left-dots"></em>
+            </a>
+            <span class="border p-2 rounded-circle">0</span>
+            `;
+        blog_list.insertAdjacentHTML('afterbegin', div.outerHTML)
+    })
+        ;
+</script>
+
 </html>
